@@ -123,6 +123,4 @@ Project Link: [https://github.com/syriuslab/virtuoso](https://github.com/syriusl
 
 ## 🙏 Acknowledgments
 
-- [UNSW-NB15 Dataset](https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/)
-- [CSE-CIC-IDS2018 Dataset](https://www.unb.ca/cic/datasets/ids-2018.html)
 - All contributors who have helped shape VIRTUOSO
