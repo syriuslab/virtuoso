@@ -1,0 +1,4 @@
+src/UNSW-NSB15/UNSW-NB15.csv filter=lfs diff=lfs merge=lfs -text
+src/CSE-CIC-ID2018/CSE-CIC-IDS2018-full.csv.zip filter=lfs diff=lfs merge=lfs -text
+*.csv filter=lfs diff=lfs merge=lfs -text
+*.zip filter=lfs diff=lfs merge=lfs -text
