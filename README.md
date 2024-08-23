@@ -117,7 +117,7 @@ We welcome contributions to VIRTUOSO! Please follow these steps:
 
 ## 📞 Contact
 
-Your Name - syriuscloudarchitect@gmail.com
+syriuscloudarchitect@gmail.com
 
 Project Link: [https://github.com/syriuslab/virtuoso](https://github.com/syriuslab/virtuoso)
 
