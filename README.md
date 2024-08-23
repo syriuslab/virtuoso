@@ -98,7 +98,7 @@ python -m unittest discover tests
 
 VIRTUOSO uses two primary datasets:
 
-1. [UNSW-NB15](https://www.unsw.adfa.edu.au/unsw-canberra-cyber/cybersecurity/ADFA-NB15-Datasets/): A comprehensive dataset for network intrusion detection systems.
+1. [UNSW-NB15](https://research.unsw.edu.au/projects/unsw-nb15-dataset): A comprehensive dataset for network intrusion detection systems.
 2. [CSE-CIC-IDS2018](https://www.unb.ca/cic/datasets/ids-2018.html): A diverse dataset containing benign and the most up-to-date common attacks.
 
 Ensure you have these datasets downloaded and their paths correctly specified in the configuration file.
