@@ -1,46 +1,65 @@
 import os
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
-from ..data_preprocessing.common_preprocessing import normalize_features
+from lightgbm import LGBMClassifier
+from sklearn.model_selection import cross_val_score
+import weka.core.jvm as jvm
+from weka.classifiers import Classifier
+from weka.core.converters import Loader
 
 class MLEngine:
-    def __init__(self, model_type='random_forest', use_weka=False):
-        self.model_type = model_type
+    def __init__(self, use_weka=False):
         self.use_weka = use_weka
-        self.model = self._initialize_model()
+        if use_weka:
+            jvm.start()
 
-    def _initialize_model(self):
+    def train_and_evaluate(self, X, y):
         if self.use_weka:
-            # Placeholder for Weka model initialization
-            return None
-        elif self.model_type == 'random_forest':
-            return RandomForestClassifier()
-        elif self.model_type == 'xgboost':
-            return XGBClassifier()
+            return self._weka_train_and_evaluate(X, y)
         else:
-            raise ValueError("Unsupported model type")
+            return self._sklearn_train_and_evaluate(X, y)
 
-    def load_weka_config(self, config_path):
+    def _sklearn_train_and_evaluate(self, X, y):
+        models = {
+            'RandomForest': RandomForestClassifier(),
+            'XGBoost': XGBClassifier(),
+            'LightGBM': LGBMClassifier()
+        }
+        results = {}
+        for name, model in models.items():
+            scores = cross_val_score(model, X, y, cv=5, scoring='accuracy')
+            results[name] = scores.mean()
+        return results
+
+    def _weka_train_and_evaluate(self, X, y):
+        # Convert data to Weka format
+        data = self._convert_to_weka_instances(X, y)
+        
+        classifiers = [
+            "weka.classifiers.trees.RandomForest",
+            "weka.classifiers.functions.SMO",
+            "weka.classifiers.bayes.NaiveBayes",
+            "weka.classifiers.trees.J48"
+        ]
+        
+        results = {}
+        for clf_name in classifiers:
+            classifier = Classifier(classname=clf_name)
+            evaluation = self._evaluate_weka_classifier(classifier, data)
+            results[clf_name] = evaluation.percent_correct
+        
+        return results
+
+    def _convert_to_weka_instances(self, X, y):
+        # Implementation to convert numpy arrays to Weka Instances
+        # This is a placeholder and needs to be implemented
+        pass
+
+    def _evaluate_weka_classifier(self, classifier, data):
+        # Implementation to evaluate Weka classifier
+        # This is a placeholder and needs to be implemented
+        pass
+
+    def __del__(self):
         if self.use_weka:
-            config_file = os.path.join(config_path, f"{self.model_type}.conf")
-            # Placeholder for loading Weka configuration
-            print(f"Loading Weka configuration from {config_file}")
-
-    def train(self, X, y):
-        if self.use_weka:
-            # Placeholder for Weka model training
-            print("Training Weka model")
-        else:
-            X_normalized = normalize_features(X)
-            self.model.fit(X_normalized, y)
-
-    def predict(self, X):
-        if self.use_weka:
-            # Placeholder for Weka model prediction
-            print("Predicting with Weka model")
-            return None
-        else:
-            X_normalized = normalize_features(X)
-            return self.model.predict(X_normalized)
-
-    # ... additional methods ...
+            jvm.stop()
