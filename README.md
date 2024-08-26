@@ -9,8 +9,10 @@ VIRTUOSO (Virtuous Security On-machine based) is an advanced multilayer framewor
 - Deep Automation Security Layer for implementing best security practices
 - Intelligent Security Layer utilizing advanced ML algorithms
 - Support for multiple ML models: XGBoost, LightGBM, CatBoost, Deep Neural Networks, and LSTM
+- Optional integration with Weka for traditional machine learning models
 - Comprehensive analysis using UNSW-NB15 and CSE-CIC-IDS2018 datasets
 - Scalable architecture suitable for various cloud service models (IaaS, PaaS, SaaS)
+- Consideration for post-quantum era security challenges
 
 ## 🛠️ Installation
 
@@ -36,12 +38,15 @@ VIRTUOSO (Virtuous Security On-machine based) is an advanced multilayer framewor
    pip install -e .
    ```
 
+5. (Optional) If you plan to use Weka, ensure it's installed and properly configured.
+
 ## ⚙️ Configuration
 
 1. Navigate to the `config` directory.
 2. Open `config.yaml` and adjust the settings as needed:
    - Set the correct paths for the UNSW-NB15 and CSE-CIC-IDS2018 datasets.
    - Modify the parameters for each ML model if necessary.
+   - Configure Weka settings if you plan to use traditional ML models.
 
 ## 🖥️ Usage
 
@@ -50,39 +55,37 @@ VIRTUOSO (Virtuous Security On-machine based) is an advanced multilayer framewor
    ```bash
    python src/main.py
    ```
-3. The script will load the data, preprocess it, train the models, and output the evaluation metrics for each model on both datasets.
+3. The script will load the data, preprocess it, train the models (including Weka models if configured), and output the evaluation metrics for each model on both datasets.
 
 ## 📁 Project Structure
 
 ```
-virtuoso/
-│
-├── src/
-│   ├── data/
-│   │   ├── data_loader.py
-│   │   └── preprocessor.py
-│   ├── models/
-│   │   ├── xgboost_model.py
-│   │   ├── lightgbm_model.py
-│   │   ├── catboost_model.py
-│   │   ├── dnn_model.py
-│   │   └── lstm_model.py
-│   ├── utils/
-│   │   ├── config.py
-│   │   └── metrics.py
-│   └── main.py
-│
-├── tests/
-│   ├── test_data_loader.py
-│   ├── test_preprocessor.py
-│   └── test_models.py
-│
-├── config/
-│   └── config.yaml
-│
+virtuoso
+├── config.yaml
+├── docs
+│   └── experimental_setup.md
+├── main.py
+├── README.md
 ├── requirements.txt
-├── setup.py
-└── README.md
+├── src
+│   ├── data_preprocessing
+│   │   ├── common_preprocessing.py
+│   │   ├── __init__.py
+│   │   ├── preprocess_CSE_CIC_IDS2018.py
+│   │   └── preprocess_UNSW-NB15.py
+│   ├── deep_automation_layer
+│   │   └── security_policy_enforcer.py
+│   ├── intelligent_security_layer
+│   │   └── ml_engine.py
+│   ├── utils.py
+│   ├── virtuoso_framework.py
+│   └── weka_configs
+│       ├── J48.conf
+│       ├── NaiveBayes.conf
+│       ├── RandomForest.conf
+│       └── SVM.conf
+└── tests
+    └── test_virtuoso.py
 ```
 
 ## 🧪 Running Tests
@@ -112,8 +115,6 @@ We welcome contributions to VIRTUOSO! Please follow these steps:
 4. Push to the branch: `git push origin feature/AmazingFeature`.
 5. Open a pull request.
 
-
-
 ## 📞 Contact
 
 syriuscloudarchitect@gmail.com
@@ -123,3 +124,4 @@ Project Link: [https://github.com/syriuslab/virtuoso](https://github.com/syriusl
 ## 🙏 Acknowledgments
 
 - All contributors who have helped shape VIRTUOSO
+- The Weka project for providing traditional machine learning capabilities
