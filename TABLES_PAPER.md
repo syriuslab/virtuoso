@@ -1,6 +1,6 @@
 # VIRTUOSO: Tables from the Paper
 
-This document contains all the tables from the VIRTUOSO paper, formatted for easy reference and professional screenshots.
+
 
 ## Table 1: Cloud computing tools and compliance of SecOps principles
 
