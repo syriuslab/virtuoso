@@ -1,0 +1,20 @@
+datasets:
+  UNSW-NB15:
+    path: "path/to/UNSW-NB15_dataset.csv"
+  CSE-CIC-IDS2018:
+    path: "path/to/CSE-CIC-IDS2018_dataset.csv"
+
+models:
+  RandomForest:
+    n_estimators: 100
+    max_depth: 10
+  XGBoost:
+    n_estimators: 100
+    learning_rate: 0.1
+  LightGBM:
+    n_estimators: 100
+    num_leaves: 31
+
+weka:
+  use_weka: false
+  classpath: "/path/to/weka.jar"
