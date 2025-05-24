@@ -1,127 +1,122 @@
-## VIRTUOSO 🛡️
+# VIRTUOSO 🔐 — Reproducible Network Intrusion & Web-Attack Detection Pipeline
 
-[![Python Version](https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9-blue)](https://www.python.org/downloads/)
+**VIRTUOSO** is a pure-Python framework that implements and evaluates five state-of-the-art machine-learning models over two large-scale IDS benchmarks—**UNSW-NB15** (real network traffic) and **CSE-CIC-IDS2018** (web-attack subset). All results in our paper can be reproduced in under 30 minutes per model on a free Google Colab T4 session.
 
-VIRTUOSO (Virtuous Security On-machine based) is an advanced multilayer framework designed to enhance security in cloud computing environments. It leverages state-of-the-art Machine Learning (ML) and Artificial Intelligence (AI) techniques, integrating them with industry-leading security practices and SecOps principles.
+---
 
-## 🚀 Features
+## Key Features
 
-- Deep Automation Security Layer for implementing best security practices
-- Intelligent Security Layer utilizing advanced ML algorithms
-- Support for multiple ML models: XGBoost, LightGBM, CatBoost, Deep Neural Networks, and LSTM
-- Optional integration with Weka for traditional machine learning models
-- Comprehensive analysis using UNSW-NB15 and CSE-CIC-IDS2018 datasets
-- Scalable architecture suitable for various cloud service models (IaaS, PaaS, SaaS)
-- Consideration for post-quantum era security challenges
+* **Five classifiers**
 
-## 🛠️ Installation
+  * **Baseline**: Random Forest
+  * **Ensembles**: XGBoost, LightGBM, CatBoost
+  * **Deep Net**: Balanced DNN (SMOTE + class-weight)
 
-1. Clone the repository:
+* **Two datasets**
+
+  * **UNSW-NB15** (700 001 flows, 49 features, real-world)
+  * **CSE-CIC-IDS2018-Web** (118 652 flows, 60 features, simulated HTTP attacks)
+
+* **Rigorous evaluation**
+
+  * 5-fold **stratified CV** (seed = 42, shuffle=True)
+  * **SMOTE** on each training fold to address class imbalance
+  * **Eight metrics**: Accuracy, Precision, Recall, F1-Score, MCC, AUC-ROC, AUC-PR, FPR & FNR
+  * Global **ROC** & **PR** curves for each model
+
+* **Reproducible & portable**
+
+  * Runs in **< 30 min** per model on Colab T4 (≤ 8 GB RAM)
+  * Identical behavior on commodity cloud instances
+    (e.g. AWS g4dn.xlarge, Azure NC4as\_T4\_v3, GCP n1-standard-4 + T4)
+
+---
+
+## Repository Structure
+
+```
+virtuoso/
+├── config.yaml               ← Dataset paths & hyperparameters  
+├── main.py                   ← Unified CLI entry point  
+├── README.md                 ← This file  
+├── REPLICATION_GUIDE.md      ← Step-by-step reproduction instructions  
+├── TABLES_PAPER.md           ← Markdown version of Table 4  
+├── EXPERIMENT_LOG.md         ← Detailed runtimes & logs  
+├── requirements.txt          ← Python dependencies  
+└── scripts/  
+    ├── run_rf_kfold.py       ← Random Forest  
+    ├── run_xgb_kfold.py      ← XGBoost  
+    ├── run_lgbm_kfold.py     ← LightGBM  
+    ├── run_catboost_kfold.py ← CatBoost (CPU)  
+    └── run_dnn_kfold.py      ← Balanced DNN  
+```
+
+---
+
+## Quickstart
+
+1. **Install dependencies**
+
    ```bash
-   git clone https://github.com/syriuslab/virtuoso.git
-   cd virtuoso
-   ```
-
-2. Set up a virtual environment (optional but recommended):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
-
-3. Install the required packages:
-   ```bash
+   python3 -m venv venv
+   source venv/bin/activate
    pip install -r requirements.txt
    ```
 
-4. Install the project in editable mode:
-   ```bash
-   pip install -e .
+2. **Prepare data**
+   Download or generate preprocessed CSVs and place them in `data/`:
+
+   ```
+   data/UNSW_X.csv      data/UNSW_y.csv
+   data/IDS_X_web.csv   data/IDS_y_web.csv
    ```
 
-5. (Optional) If you plan to use Weka, ensure it's installed and properly configured.
+3. **Run a model**
 
-## ⚙️ Configuration
-
-1. Navigate to the `config` directory.
-2. Open `config.yaml` and adjust the settings as needed:
-   - Set the correct paths for the UNSW-NB15 and CSE-CIC-IDS2018 datasets.
-   - Modify the parameters for each ML model if necessary.
-   - Configure Weka settings if you plan to use traditional ML models.
-
-## 🖥️ Usage
-
-1. Ensure your dataset files are in the correct location as specified in `config.yaml`.
-2. Run the main script:
    ```bash
-   python src/main.py
+   # Example: XGBoost on UNSW-NB15
+   python main.py --model xgb --dataset UNSW-NB15
    ```
-3. The script will load the data, preprocess it, train the models (including Weka models if configured), and output the evaluation metrics for each model on both datasets.
 
-## 📁 Project Structure
+   This will:
 
-```
-virtuoso
-├── config.yaml
-├── docs
-│   └── experimental_setup.md
-├── main.py
-├── README.md
-├── requirements.txt
-├── src
-│   ├── data_preprocessing
-│   │   ├── common_preprocessing.py
-│   │   ├── __init__.py
-│   │   ├── preprocess_CSE_CIC_IDS2018.py
-│   │   └── preprocess_UNSW-NB15.py
-│   ├── deep_automation_layer
-│   │   └── security_policy_enforcer.py
-│   ├── intelligent_security_layer
-│   │   └── ml_engine.py
-│   ├── utils.py
-│   ├── virtuoso_framework.py
-│   └── weka_configs
-│       ├── J48.conf
-│       ├── NaiveBayes.conf
-│       ├── RandomForest.conf
-│       └── SVM.conf
-└── tests
-    └── test_virtuoso.py
-```
+   * Perform **5-fold stratified CV** with SMOTE on each training fold
+   * Compute and display **mean ± std** for all eight evaluation metrics
+   * Plot **global ROC** & **Precision-Recall** curves
 
-## 🧪 Running Tests
+4. **Batch execution**
+   To run all five models on both datasets:
 
-To run the unit tests:
+   ```bash
+   for m in rf xgb lgbm catboost dnn; do
+     python main.py --model $m --dataset UNSW-NB15
+     python main.py --model $m --dataset CSE-CIC-IDS2018
+   done
+   ```
 
-```bash
-python -m unittest discover tests
-```
+---
 
-## 📊 Datasets
+## Outputs & Figures
 
-VIRTUOSO uses two primary datasets:
+* **Console logs** match **Table 4** (paper) exactly.
+* **Plots** correspond to **Figures 3–5** in the manuscript.
+* See `TABLES_PAPER.md` for a Markdown copy of Table 4.
 
-1. [UNSW-NB15](https://research.unsw.edu.au/projects/unsw-nb15-dataset): A comprehensive dataset for network intrusion detection systems.
-2. [CSE-CIC-IDS2018](https://www.unb.ca/cic/datasets/ids-2018.html): A diverse dataset containing benign and the most up-to-date common attacks.
+---
 
-Ensure you have these datasets downloaded and their paths correctly specified in the configuration file.
+## Detailed Replication
 
-## 🤝 Contributing
+See **REPLICATION\_GUIDE.md** for:
 
-We welcome contributions to VIRTUOSO! Please follow these steps:
+* Full environment setup
+* Data acquisition & preprocessing
+* Exact command lines & expected outputs
 
-1. Fork the repository.
-2. Create a new branch: `git checkout -b feature/AmazingFeature`.
-3. Make your changes and commit them: `git commit -m 'Add some AmazingFeature'`.
-4. Push to the branch: `git push origin feature/AmazingFeature`.
-5. Open a pull request.
+---
 
-## 📞 Contact
+## Experiment Log & Timings
 
-syriuscloudarchitect@gmail.com
+All runtime measurements, hardware details, and key observations are recorded in **EXPERIMENT\_LOG.md**.
 
-Project Link: [https://github.com/syriuslab/virtuoso](https://github.com/syriuslab/virtuoso)
+---
 
-## 🙏 Acknowledgments
-
-- All contributors who have helped shape VIRTUOSO
-- The Weka project for providing traditional machine learning capabilities

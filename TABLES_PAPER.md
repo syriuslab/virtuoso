@@ -1,72 +1,24 @@
-# VIRTUOSO: Tables from the Paper
 
+### Performance of Machine Learning Models across Datasets
 
+| Model        | Dataset         | Accuracy        | Precision       | Recall          | F1 Score        | AUC-ROC | FPR    | FNR    | MCC    |
+| ------------ | --------------- | --------------- | --------------- | --------------- | --------------- | ------- | ------ | ------ | ------ |
+| RandomForest | UNSW-NB15       | 0.9965 ± 0.0006 | 0.9137 ± 0.0155 | 0.9861 ± 0.0042 | 0.9484 ± 0.0077 | 0.9997  | 0.0063 | 0.0139 | 0.9362 |
+| XGBoost      | UNSW-NB15       | 0.9968 ± 0.0005 | 0.9311 ± 0.0106 | 0.9739 ± 0.0049 | 0.9520 ± 0.0069 | 0.9998  | 0.0045 | 0.0261 | 0.9421 |
+| LightGBM     | UNSW-NB15       | 0.9957 ± 0.0001 | 0.8808 ± 0.0036 | 0.9997 ± 0.0001 | 0.9365 ± 0.0020 | 0.9999  | 0.0171 | 0.0003 | 0.9298 |
+| CatBoost     | UNSW-NB15       | 0.9955 ± 0.0004 | 0.8829 ± 0.0119 | 0.9944 ± 0.0026 | 0.9353 ± 0.0058 | 0.9997  | 0.0170 | 0.0056 | 0.9276 |
+| DNN          | UNSW-NB15       | 0.9749 ± 0.0013 | 0.6903 ± 0.0405 | 0.4311 ± 0.0181 | 0.5301 ± 0.0188 | 0.9281  | 0.0268 | 0.5689 | 0.4902 |
+| RandomForest | CSE-CIC-IDS2018 | 0.9919 ± 0.0030 | 0.9904 ± 0.0060 | 0.9935 ± 0.0040 | 0.9919 ± 0.0030 | 0.9971  | 0.0100 | 0.0065 | 0.9842 |
+| XGBoost      | CSE-CIC-IDS2018 | 0.9919 ± 0.0024 | 0.9893 ± 0.0047 | 0.9946 ± 0.0034 | 0.9919 ± 0.0024 | 0.9988  | 0.0035 | 0.0054 | 0.9843 |
+| LightGBM     | CSE-CIC-IDS2018 | 0.9935 ± 0.0037 | 0.9936 ± 0.0062 | 0.9935 ± 0.0053 | 0.9935 ± 0.0036 | 0.9986  | 0.0011 | 0.0065 | 0.9870 |
+| CatBoost     | CSE-CIC-IDS2018 | 0.9919 ± 0.0038 | 0.9904 ± 0.0060 | 0.9935 ± 0.0053 | 0.9919 ± 0.0038 | 0.9985  | 0.0030 | 0.0065 | 0.9842 |
+| DNN          | CSE-CIC-IDS2018 | 0.9828 ± 0.0110 | 0.9700 ± 0.0190 | 0.9968 ± 0.0026 | 0.9831 ± 0.0106 | 0.9971  | 0.0043 | 0.0032 | 0.9661 |
 
-## Table 1: Cloud computing tools and compliance of SecOps principles
+---
 
-| Tool | Compliance Framework | Security Testing | Security Orchestration |
-|------|----------------------|-------------------|------------------------|
-| Jenkins | ✓ | ✓ | ✓ |
-| GitLab | ✓ | ✓ | ✓ |
-| Ansible | ✓ | - | ✓ |
-| Terraform | ✓ | - | ✓ |
-| Docker | - | ✓ | ✓ |
-| Kubernetes | - | ✓ | ✓ |
-| Prometheus | - | - | ✓ |
-| ELK Stack | - | - | ✓ |
+### Notes:
 
-## Table 2: New Shared Responsibility Model under VIRTUOSO
-
-| Security Domain | IaaS | PaaS | SaaS |
-|-----------------|------|------|------|
-| Data and Data Access | Shared | Shared | Shared |
-| Application | User | User | Provider |
-| Middleware | User | Shared | Provider |
-| Operating Systems | Shared | Provider | Provider |
-| Network | Shared | Provider | Provider |
-| Virtual Environments | Shared | Provider | Provider |
-| Physical Security | Provider | Provider | Provider |
-
-## Table 3: Comparison of CSR Model and Deep Automation Security Layer
-
-| Security Domain | Traditional CSR | VIRTUOSO CSR |
-|-----------------|-----------------|--------------|
-| Data and Data Access | User | Shared |
-| Application | User | User (IaaS, PaaS), Provider (SaaS) |
-| Middleware | User (IaaS), Provider (PaaS, SaaS) | Shared (IaaS, PaaS), Provider (SaaS) |
-| Operating Systems | User (IaaS), Provider (PaaS, SaaS) | Shared (IaaS), Provider (PaaS, SaaS) |
-| Network | Shared | Shared |
-| Virtual Environments | Provider | Shared |
-| Physical Security | Provider | Provider |
-
-## Table 4: Performance Results of Machine Learning Algorithms
-
-| Algorithm | Dataset | Accuracy | Precision | Recall | F1-Score | AUC-ROC |
-|-----------|---------|----------|-----------|--------|----------|---------|
-| Random Forest (Weka) | UNSW-NB15 | 98.85% | 98.88% | 98.83% | 98.85 | 0.9975 |
-| SVM (Weka) | UNSW-NB15 | 97.60% | 97.65% | 97.56% | 97.60 | 0.9945 |
-| Naive Bayes (Weka) | UNSW-NB15 | 95.40% | 95.48% | 95.33% | 95.40 | 0.9855 |
-| J48 (Weka) | UNSW-NB15 | 97.20% | 97.25% | 97.16% | 97.20 | 0.9925 |
-| XGBoost | UNSW-NB15 | 99.82% | 99.85% | 99.80% | 99.82 | 0.9995 |
-| LightGBM | UNSW-NB15 | 99.78% | 99.81% | 99.76% | 99.78 | 0.9993 |
-| CatBoost | UNSW-NB15 | 99.80% | 99.83% | 99.78% | 99.80 | 0.9994 |
-| DNN | UNSW-NB15 | 99.75% | 99.78% | 99.73% | 99.75 | 0.9992 |
-| LSTM | UNSW-NB15 | 99.79% | 99.82% | 99.77% | 99.79 | 0.9994 |
-| Random Forest (Weka) | CSE-CIC-IDS2018 | 99.00% | 99.03% | 98.98% | 99.00 | 0.9980 |
-| SVM (Weka) | CSE-CIC-IDS2018 | 98.20% | 98.25% | 98.16% | 98.20 | 0.9960 |
-| Naive Bayes (Weka) | CSE-CIC-IDS2018 | 96.50% | 96.57% | 96.44% | 96.50 | 0.9890 |
-| J48 (Weka) | CSE-CIC-IDS2018 | 98.00% | 98.05% | 97.96% | 98.00 | 0.9950 |
-| XGBoost | CSE-CIC-IDS2018 | 99.91% | 99.93% | 99.90% | 99.91 | 0.9998 |
-| LightGBM | CSE-CIC-IDS2018 | 99.89% | 99.91% | 99.88% | 99.89 | 0.9997 |
-| CatBoost | CSE-CIC-IDS2018 | 99.90% | 99.92% | 99.89% | 99.90 | 0.9997 |
-| DNN | CSE-CIC-IDS2018 | 99.87% | 99.89% | 99.86% | 99.87 | 0.9996 |
-| LSTM | CSE-CIC-IDS2018 | 99.88% | 99.90% | 99.87% | 99.88 | 0.9997 |
-
-## Table 5: Comparison of VIRTUOSO with Existing Approaches
-
-| Approach | Accuracy | FPR | Reference |
-|----------|----------|-----|-----------|
-| VIRTUOSO (XGBoost) | 99.91% | 0.07% | Current study |
-| Deep Learning-based IDS | 98.80% | 0.65% | [85] |
-| Unsupervised Deep Learning | 99.20% | 0.40% | [86] |
-| Ensemble Learning IDS | 99.10% | 0.33% | [87] |
+* All results averaged over 5 stratified folds.
+* SMOTE + StandardScaler applied for DNN.
+* Precision/Recall tradeoffs visible in lower MCC scores for DNN on UNSW-NB15.
+* LightGBM shows the highest accuracy and MCC on CSE-CIC-IDS2018.

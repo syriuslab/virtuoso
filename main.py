@@ -1,26 +1,52 @@
-from src.virtuoso_framework import VIRTUOSOFramework
-from src.utils import logger, config, check_dependencies
+#!/usr/bin/env python3
+"""
+CLI wrapper for running any of the 5 k-fold scripts:
 
-def main():
-    try:
-        check_dependencies()
-        
-        # Example with UNSW-NB15 dataset
-        logger.info("Starting VIRTUOSO with UNSW-NB15 dataset")
-        virtuoso_unsw = VIRTUOSOFramework('UNSW-NB15', use_weka=config['weka']['use_weka'])
-        results_unsw = virtuoso_unsw.run(config['datasets']['UNSW-NB15']['path'])
-        logger.info("Results for UNSW-NB15:")
-        logger.info(results_unsw)
+Example:
+    python main.py --model xgb --dataset UNSW-NB15
+"""
 
-        # Example with CSE-CIC-IDS2018 dataset
-        logger.info("Starting VIRTUOSO with CSE-CIC-IDS2018 dataset")
-        virtuoso_cse = VIRTUOSOFramework('CSE-CIC-IDS2018', use_weka=config['weka']['use_weka'])
-        results_cse = virtuoso_cse.run(config['datasets']['CSE-CIC-IDS2018']['path'])
-        logger.info("Results for CSE-CIC-IDS2018:")
-        logger.info(results_cse)
+import argparse
+import subprocess
+import sys
+import yaml
+from pathlib import Path
 
-    except Exception as e:
-        logger.error(f"An error occurred: {str(e)}", exc_info=True)
+ROOT = Path(__file__).parent
+with open(ROOT / "config.yaml", "r") as f:
+    CFG = yaml.safe_load(f)
+
+# mapping from short key to script path
+SCRIPTS = {
+    "rf":       "scripts/run_rf_kfold.py",
+    "xgb":      "scripts/run_xgb_kfold.py",
+    "lgbm":     "scripts/run_lgbm_kfold.py",
+    "catboost": "scripts/run_catboost_kfold.py",
+    "dnn":      "scripts/run_dnn_kfold.py",
+}
+
+def run(model: str, dataset: str):
+    model = model.lower()
+    script = ROOT / SCRIPTS[model]
+    X = CFG["datasets"][dataset]["X_path"]
+    y = CFG["datasets"][dataset]["y_path"]
+    cmd = [
+        sys.executable, str(script),
+        "--X", X, "--y", y,
+        "--prefix", dataset,
+        "--folds", str(CFG["cv"]["n_splits"])
+    ]
+    if model == "dnn" and CFG["cv"]["class_weight_dnn"]:
+        cmd += ["--class_weight"]
+    subprocess.run(cmd, check=True)
 
 if __name__ == "__main__":
-    main()
+    p = argparse.ArgumentParser(description="Run VIRTUOSO k-fold scripts")
+    p.add_argument("--model", required=True,
+                   choices=SCRIPTS.keys(),
+                   help="Model to run")
+    p.add_argument("--dataset", required=True,
+                   choices=CFG["datasets"].keys(),
+                   help="Dataset key")
+    args = p.parse_args()
+    run(args.model, args.dataset)

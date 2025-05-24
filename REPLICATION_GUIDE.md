@@ -1,50 +1,85 @@
-# Guide to Replicate VIRTUOSO Experiments
+# REPLICATION\_GUIDE.md
 
-This guide provides step-by-step instructions to replicate the experiments described in the VIRTUOSO paper.
+## Objective
 
-## Prerequisites
+This guide explains how to replicate the full set of experiments described in the VIRTUOSO paper, using public datasets and standard cloud environments. It covers preprocessing, model training, and evaluation pipelines.
 
-- Python 3.8+
-- Weka 3.8.5
-- Datasets: UNSW-NB15 and CSE-CIC-IDS2018 (download links in the paper)
+## Requirements
 
-## Setup
+* Python 3.8+
+* Google Colab (free tier) or equivalent cloud VM
+* Dependencies listed in `requirements.txt` (e.g., scikit-learn, XGBoost, LightGBM, CatBoost, TensorFlow)
+* Datasets:
 
-1. Clone the repository:
-   ```
-   git clone https://github.com/syriuslab/virtuoso.git
-   cd virtuoso
-   ```
+  * UNSW-NB15 CSV: [https://research.unsw.edu.au/projects/unsw-nb15-dataset](https://research.unsw.edu.au/projects/unsw-nb15-dataset)
+  * CSE-CIC-IDS2018 Web Subset: pre-filtered subset (available in Colab environment)
 
-2. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+## Folder Structure
 
-3. Download the datasets and place them in a `data` folder in the project root.
+```
+virtuoso/
+├── data/
+│   ├── UNSW_X.csv
+│   ├── UNSW_y.csv
+│   ├── IDS_X_web.csv
+│   └── IDS_y_web.csv
+├── scripts/
+│   ├── run_xgboost.py
+│   ├── run_lightgbm.py
+│   ├── run_catboost.py
+│   └── run_dnn.py
+├── utils/
+│   └── metrics_plotting.py
+├── requirements.txt
+├── config.yaml
+```
 
-## Running the Experiments
+## Steps to Reproduce
 
-1. Preprocess the data:
-   ```
-   python src/data_preprocessing/preprocess_UNSW-NB15.py
-   python src/data_preprocessing/preprocess_CSE_CIC_IDS2018.py
-   ```
+### 1. Prepare Environment
 
-2. Run Weka experiments:
-   ```
-   java -jar weka.jar -main weka.Run .RF -t data/UNSW-NB15_processed.arff
-   ```
-   (Repeat for other Weka models and datasets)
+Use `pip install -r requirements.txt` to install all Python dependencies.
 
-3. Run Python experiments:
-   ```
-   python src/main.py
-   ```
+### 2. Preprocess Data
 
-4. Analyze results:
-   ```
-   python src/analyze_results.py
-   ```
+The preprocessing is handled directly inside each script, including:
 
-For detailed explanations of each step, refer to the comments in the respective Python scripts.
+* Label encoding of categorical features
+* StandardScaler normalization (for DNN)
+* Stratified 5-fold split
+* SMOTE applied to training folds only
+
+### 3. Train Models
+
+Each script handles one model:
+
+* `run_xgboost.py`: runs XGBoost with fixed hyperparameters
+* `run_lightgbm.py`: uses LGBMClassifier with stratified CV
+* `run_catboost.py`: uses CPU-based CatBoost with SMOTE
+* `run_dnn.py`: runs TensorFlow-based DNN with early stopping and ReduceLR
+
+Each script outputs averaged metrics and generates:
+
+* ROC Curve (saved as PNG)
+* Precision-Recall Curve
+* AUC/PR scores
+
+### 4. Evaluate Results
+
+All scripts produce the following metrics (averaged across folds):
+
+* Accuracy
+* Precision
+* Recall
+* F1 Score
+* MCC
+* AUC-ROC
+* AUC-PR
+
+These match the values in Table 4 and Figures 3-5 in the paper.
+
+## Notes
+
+* Results are deterministic thanks to fixed random seed (42).
+* All scripts are runnable on Google Colab in < 30 minutes each.
+* You may replace datasets with newer ones to extend the analysis.
