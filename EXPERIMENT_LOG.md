@@ -73,7 +73,8 @@ Total runtime for each complete pipeline (per model): **< 30 minutes**.
 
 ## Reproducibility
 
-The full pipeline, including data preprocessing, model training, and evaluation, is reproducible using the provided scripts and notebooks. No proprietary tooling is required.
+The full pipeline, including data preprocessing, model training, and evaluation, is reproducible using the provided scripts and notebooks. No proprietary tooling is required. 
+The main Jupyter Notebook (**Virtuoso_pipeline**) used for conducting the experiments and searching the optimal parameters is deposited in the root folder of the GitHub repository. It is designed to be executed on Google Colab.
 
 ---
 

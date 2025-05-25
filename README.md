@@ -138,6 +138,5 @@ See **REPLICATION\_GUIDE.md** for:
 
 All runtime measurements, hardware details, and key observations are recorded in **EXPERIMENT\_LOG.md**.
 
-The main Jupyter Notebook (Virtuoso_pipeline) used for conducting the experiments and searching the optimal parameters is deposited in the root folder of the GitHub repository. It is designed to be executed on Google Colab.
 ---
 
