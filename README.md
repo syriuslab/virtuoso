@@ -111,16 +111,6 @@ virtuoso/
    for m in rf xgb lgbm catboost dnn; do
      python main.py --model $m --dataset UNSW-NB15
      python main.py --model $m --dataset CSE-CIC-IDS2018
-   done
-   ```
-
----
-
-## Outputs & Figures
-
-* **Console logs** match **Table 4** (paper) exactly.
-* **Plots** correspond to **Figures 3–5** in the manuscript.
-* See `TABLES_PAPER.md` for a Markdown copy of Table 4.
 
 ---
 
