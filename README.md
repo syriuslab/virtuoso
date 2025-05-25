@@ -1,4 +1,4 @@
-# VIRTUOSO 🔐 — Reproducible Network Intrusion & Web-Attack Detection Pipeline
+## VIRTUOSO 🛡️
 
 **VIRTUOSO** (Virtuous Security On-machine based) is an advanced multilayer framework designed to enhance security in cloud computing environments. It leverages state-of-the-art Machine Learning (ML) and Artificial Intelligence (AI) techniques, integrating them with industry-leading security practices and SecOps principles.
 VIRTUOSO is a pure-Python framework that implements and evaluates five state-of-the-art machine-learning models over two large-scale IDS benchmarks—**UNSW-NB15** (real network traffic) and **CSE-CIC-IDS2018** (web-attack subset). All results in our paper can be reproduced in under 30 minutes per model on a free Google Colab T4 session.
