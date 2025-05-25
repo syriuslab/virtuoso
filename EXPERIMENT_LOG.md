@@ -1,7 +1,7 @@
 
 ## Overview
 
-This document provides a detailed log of the experiments conducted using the VIRTUOSO framework, following the methodology described in the accompanying paper. Two datasets were used: **UNSW-NB15** and **CSE-CIC-IDS2018-WEB**, each evaluated across multiple machine learning algorithms.
+This document provides a detailed log of the experiments conducted using the VIRTUOSO framework. Two datasets were used: **UNSW-NB15** and **CSE-CIC-IDS2018-WEB**, each evaluated across multiple machine learning algorithms.
 
 ---
 
@@ -34,8 +34,6 @@ Each model was evaluated using the following performance metrics:
 6. **False Positive Rate (FPR)**
 7. **False Negative Rate (FNR)**
 8. **Matthews Correlation Coefficient (MCC)**
-
-These metrics were computed as per Equations (1) to (8) in the manuscript.
 
 ---
 
