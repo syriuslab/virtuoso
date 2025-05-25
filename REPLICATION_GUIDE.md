@@ -76,7 +76,6 @@ All scripts produce the following metrics (averaged across folds):
 * AUC-ROC
 * AUC-PR
 
-These match the values in Table 4 and Figures 3-5 in the paper.
 
 ## Notes
 
