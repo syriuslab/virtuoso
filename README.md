@@ -35,7 +35,7 @@ VIRTUOSO is a pure-Python framework that implements and evaluates five state-of-
 * **Two datasets**
 
   * **UNSW-NB15** (700 001 flows, 49 features, real-world)
-  * **CSE-CIC-IDS2018-Web** (118 652 flows, 60 features, simulated HTTP attacks)
+  * **CSE-CIC-IDS2018** (118 652 flows, 60 features, simulated HTTP attacks)
 
 * **Rigorous evaluation**
 
@@ -63,6 +63,7 @@ virtuoso/
 ├── TABLES_PAPER.md           ← Markdown version of Table 4  
 ├── EXPERIMENT_LOG.md         ← Detailed runtimes & logs  
 ├── requirements.txt          ← Python dependencies  
+├── src/                      ← datasets and data_preprocessing useful for the pipeline
 └── scripts/  
     ├── run_rf_kfold.py       ← Random Forest  
     ├── run_xgb_kfold.py      ← XGBoost  
@@ -84,11 +85,11 @@ virtuoso/
    ```
 
 2. **Prepare data**
-   Download or generate preprocessed CSVs and place them in `data/`:
+   You just need to prepare your data (datasets and preprocessing files useful for the pipeline):
 
    ```
-   data/UNSW_X.csv      data/UNSW_y.csv
-   data/IDS_X_web.csv   data/IDS_y_web.csv
+   src/datatasets/
+   src/data_preprocessing/
    ```
 
 3. **Run a model**
@@ -97,6 +98,7 @@ virtuoso/
    # Example: XGBoost on UNSW-NB15
    python main.py --model xgb --dataset UNSW-NB15
    ```
+   or simply run it via Google Collab
 
    This will:
 
