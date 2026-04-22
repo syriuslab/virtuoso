@@ -1,134 +1,147 @@
-## VIRTUOSO 🛡️
+# VIRTUOSO Pipeline
 
-**VIRTUOSO** (Virtuous Security On-machine based) is an advanced multilayer framework designed to enhance security in cloud computing environments. It leverages state-of-the-art Machine Learning (ML) and Artificial Intelligence (AI) techniques, integrating them with industry-leading security practices and SecOps principles.
-VIRTUOSO is a pure-Python framework that implements and evaluates five state-of-the-art machine-learning models over two large-scale IDS benchmarks—**UNSW-NB15** (real network traffic) and **CSE-CIC-IDS2018** (web-attack subset). All results in our paper can be reproduced in under 30 minutes per model on a free Google Colab T4 session.
+**VIRTUOSO** stands for **VIRTual Unified Operation Security Optimiser**.  
+This repository contains an end to end research pipeline for multi layer cyber security evaluation across three complementary security views:
 
----
+- **Channel 1**: network intrusion detection on benchmark IDS datasets
+- **Channel 2**: behavioural anomaly detection on AWS CloudTrail logs
+- **Channel 3**: CNAPP style static security inspection from infrastructure scan reports
 
-## Key Features
-
-- Deep Automation Security Layer for implementing best security practices
-
-
-- Intelligent Security Layer utilizing advanced ML algorithms
-
-
-- Support for multiple ML models: XGBoost, LightGBM, CatBoost and Deep Neural Networks
-
-
-- Comprehensive analysis using UNSW-NB15 and CSE-CIC-IDS2018 datasets
-
-
-- Scalable architecture suitable for various cloud service models (IaaS, PaaS, SaaS)
-
-
-- Consideration for post-quantum era security challenges
-
-
-
-* **Five classifiers**
-
-  * **Baseline**: Random Forest
-  * **Ensembles**: XGBoost, LightGBM, CatBoost
-  * **Deep Net**: Balanced DNN (SMOTE + class-weight)
-
-* **Two datasets**
-
-  * **UNSW-NB15** (700 001 flows, 49 features, real-world)
-  * **CSE-CIC-IDS2018** (118 652 flows, 60 features, simulated HTTP attacks)
-
-* **Rigorous evaluation**
-
-  * 5-fold **stratified CV** (seed = 42, shuffle=True)
-  * **SMOTE** on each training fold to address class imbalance
-  * **Eight metrics**: Accuracy, Precision, Recall, F1-Score, MCC, AUC-ROC, AUC-PR, FPR & FNR
-  * Global **ROC** & **PR** curves for each model
-
-* **Reproducible & portable**
-
-  * Runs in **< 30 min** per model on Colab T4 (≤ 8 GB RAM)
-  * Identical behavior on commodity cloud instances
-    (e.g. AWS g4dn.xlarge, Azure NC4as\_T4\_v3, GCP n1-standard-4 + T4)
+The pipeline combines classical machine learning, deep learning, adversarial robustness analysis, statistical testing, computational cost profiling, and paper ready export utilities in a single notebook oriented workflow.
 
 ---
 
-## Repository Structure
+## What this pipeline does
 
-```
-virtuoso/
-├── config.yaml               ← Dataset paths & hyperparameters  
-├── main.py                   ← Unified CLI entry point  
-├── README.md                 ← This file  
-├── REPLICATION_GUIDE.md      ← Step-by-step reproduction instructions  
-├── TABLES_PAPER.md           ← Markdown version of Table 4  
-├── EXPERIMENT_LOG.md         ← Detailed runtimes & logs  
-├── requirements.txt          ← Python dependencies  
-├── src/                      ← datasets and data_preprocessing useful for the pipeline
-└── scripts/  
-    ├── run_rf_kfold.py       ← Random Forest  
-    ├── run_xgb_kfold.py      ← XGBoost  
-    ├── run_lgbm_kfold.py     ← LightGBM  
-    ├── run_catboost_kfold.py ← CatBoost (CPU)  
-    └── run_dnn_kfold.py      ← Balanced DNN  
-```
+The notebook implements a unified experimental workflow that:
+
+1. **Prepares benchmark datasets** for supervised intrusion detection.
+2. **Trains and evaluates Tier 1 tabular models** including Random Forest, XGBoost, LightGBM, and CatBoost.
+3. **Trains a DNN baseline** with repeated stratified splits.
+4. **Assesses robustness under adversarial perturbations** using FGSM and PGD.
+5. **Builds a behavioural anomaly detector for CloudTrail** with an Autoencoder and Isolation Forest.
+6. **Parses CNAPP findings** from Checkov and Trivy reports.
+7. **Aggregates risk signals across layers** into a consolidated risk snapshot.
+8. **Exports paper ready tables, figures, and CSV artefacts** for downstream reporting.
+
+This design is useful when the goal is not only high predictive performance, but also a broader security posture assessment that spans runtime traffic, cloud audit behaviour, and infrastructure misconfiguration signals.
 
 ---
 
-## Quickstart
+## Main components
 
-1. **Install dependencies**
+### 1. Channel 1: Intrusion Detection
+The supervised IDS layer uses two public datasets:
 
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
+- **UNSW-NB15**
+- **CSE-CIC-IDS2018 WEB subset** using the Thursday-22 and Friday-23 attack traffic files
 
-2. **Prepare data**
-   You just need to prepare your data (datasets and preprocessing files useful for the pipeline):
+The pipeline performs dataset specific preprocessing, then evaluates:
 
-   ```
-   src/datatasets/
-   src/data_preprocessing/
-   ```
+- Random Forest
+- XGBoost
+- LightGBM
+- CatBoost
+- DNN baseline
 
-3. **Run a model**
+The evaluation includes:
 
-   ```bash
-   # Example: XGBoost on UNSW-NB15
-   python main.py --model xgb --dataset UNSW-NB15
-   ```
-   or simply run it via Google Collab
+- 5 fold stratified cross validation for Tier 1 models
+- repeated train test splits for DNN
+- per fold tracking of metrics
+- train and inference timing
+- train test gap inspection for overfitting analysis
+- hyperparameter sensitivity analysis
+- paper ready summary tables and bar charts
 
-   This will:
+### 2. Channel 2: CloudTrail Behavioural Anomaly Detection
+The cloud audit layer loads **flAWS CloudTrail logs** and converts raw events into session level features. It then trains:
 
-   * Perform **5-fold stratified CV** with SMOTE on each training fold
-   * Compute and display **mean ± std** for all eight evaluation metrics
-   * Plot **global ROC** & **Precision-Recall** curves
+- a dense **Autoencoder** for reconstruction based anomaly detection
+- an **Isolation Forest** for unsupervised anomaly detection
 
-4. **Batch execution**
-   To run all five models on both datasets:
+This layer also includes a stress test based on adversarial style perturbations of the Autoencoder input representation.
 
-   ```bash
-   for m in rf xgb lgbm catboost dnn; do
-     python main.py --model $m --dataset UNSW-NB15
-     python main.py --model $m --dataset CSE-CIC-IDS2018
+### 3. Channel 3: CNAPP Layer
+The CNAPP layer ingests infrastructure security findings from:
+
+- **Checkov** JSON reports
+- **Trivy** JSON reports
+
+If these reports are absent, the notebook can fall back to synthetic examples so that the downstream risk aggregation stages remain executable.
+
+### 4. Risk Engine
+The final risk layer merges outputs from all channels into a compact risk snapshot. In practice, this enables a single analytical view over:
+
+- IDS robustness degradation under adversarial perturbation
+- CloudTrail anomaly sensitivity
+- CNAPP finding volume and severity
 
 ---
 
-## Detailed Replication
+## Notebook structure
 
-See **REPLICATION\_GUIDE.md** for:
+The notebook is organised as follows:
 
-* Full environment setup
-* Data acquisition & preprocessing
-* Exact command lines & expected outputs
+- **Environment setup** with portable paths and partial auto download support
+- **Shared utilities** for metrics and timing
+- **UNSW-NB15 preprocessing**
+- **CSE-CIC-IDS2018 WEB preprocessing**
+- **DNN definition and repeated training**
+- **Tier 1 model training with per fold tracking**
+- **Statistical significance testing** with Friedman and Nemenyi procedures
+- **Paper ready tables and figures**
+- **Hyperparameter sensitivity and cost analysis**
+- **Dataset description and class breakdown**
+- **Adversarial evaluation** using FGSM and PGD
+- **CloudTrail loading and anomaly detection**
+- **CloudTrail stress testing**
+- **CNAPP parsing**
+- **Risk aggregation**
+- **Artefact export and global summary**
 
 ---
 
-## Experiment Log & Timings
+## Datasets
 
-All runtime measurements, hardware details, and key observations are recorded in **EXPERIMENT\_LOG.md**.
+### UNSW-NB15
+Used for supervised binary intrusion detection. The notebook expects:
+
+- `UNSW_NB15_training-set.csv`
+- `UNSW_NB15_testing-set.csv`
+
+The pipeline attempts automatic download through `kagglehub`. If that fails, the files should be placed manually in `data/`.
+
+### CSE-CIC-IDS2018
+Only the web attack subset is used. The notebook expects:
+
+- `Thursday-22-02-2018_TrafficForML_CICFlowMeter.csv`
+- `Friday-23-02-2018_TrafficForML_CICFlowMeter.csv`
+
+The download is attempted from the public S3 bucket via AWS CLI with `--no-sign-request`.
+
+### CloudTrail flAWS logs
+The notebook downloads and extracts the public `flaws_cloudtrail_logs.tar` archive if it is not already present.
+
+---
+
+## Requirements
+
+The notebook relies mainly on the following Python packages:
+
+- `numpy`
+- `pandas`
+- `matplotlib`
+- `scikit-learn`
+- `tensorflow`
+- `xgboost`
+- `lightgbm`
+- `catboost`
+- `scikit-posthocs`
+- `awscli` for public S3 download support
+- `kagglehub` for UNSW dataset retrieval
+
+A notebook environment such as **Google Colab** is supported, but the pipeline also runs in a local Python environment with a valid working directory.
 
 ---
 
