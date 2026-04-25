@@ -145,11 +145,23 @@ A notebook environment such as **Google Colab** is supported, but the pipeline a
 
 ## Citation
 
-If you use this work, please cite the following paper:
+Ancora più minimale, senza titolo di sezione:
 
-Raja Waseem Anwar, Flavio Pastore, and Tariq Abdullah.
-VIRTUOSO: A Multilayer Cloud Security and Risk Management Framework.  
-Computers, 15(5), 272, 2026.  
-https://doi.org/10.3390/computers15050272
+````markdown
+If you use this work, please cite:
+
+```bibtex
+@article{anwar2026virtuoso,
+  title   = {VIRTUOSO: A Multilayer Cloud Security and Risk Management Framework},
+  author  = {Anwar, Raja Waseem and Pastore, Flavio and Abdullah, Tariq},
+  journal = {Computers},
+  volume  = {15},
+  number  = {5},
+  pages   = {272},
+  year    = {2026},
+  doi     = {10.3390/computers15050272},
+  url     = {https://www.mdpi.com/2073-431X/15/5/272}
+}
+
 ---
 
