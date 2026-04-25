@@ -143,5 +143,8 @@ The notebook relies mainly on the following Python packages:
 
 A notebook environment such as **Google Colab** is supported, but the pipeline also runs in a local Python environment with a valid working directory.
 
+If you use this work, please cite our paper:
+
+[Paper Title](https://www.mdpi.com/2073-431X/15/5/272)
 ---
 
