@@ -143,6 +143,13 @@ The notebook relies mainly on the following Python packages:
 
 A notebook environment such as **Google Colab** is supported, but the pipeline also runs in a local Python environment with a valid working directory.
 
-If you use this work, please cite our paper **VIRTUOSO: A Multilayer Cloud Security and Risk Management Framework**: (https://www.mdpi.com/2073-431X/15/5/272)
+## Citation
+
+If you use this work, please cite the following paper:
+
+**Raja Waseem Anwar, Flavio Pastore, and Tariq Abdullah.**  
+*VIRTUOSO: A Multilayer Cloud Security and Risk Management Framework.*  
+Computers, 15(5), 272, 2026.  
+https://doi.org/10.3390/computers15050272
 ---
 
